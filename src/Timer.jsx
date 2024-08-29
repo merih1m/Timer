@@ -1,12 +1,13 @@
 import { useState, useRef, useEffect } from 'react';
 
 const Timer = () => {
-	const [time, setTime] = useState(0);
+	const [time, setTime] = useState(0); // Timer state
 	const [isRunning, setIsRunning] = useState(false);
 	const [log, setLog] = useState([]);
 	const [totalTime, setTotalTime] = useState(0);
 	const [inputValue, setInputValue] = useState('');
 	const [totalInputValue, setTotalInputValue] = useState(0);
+	const [isEditingTime, setIsEditingTime] = useState(false); // State to toggle edit mode
 	const intervalRef = useRef(null);
 
 	// Effect to initialize log from localStorage
@@ -28,16 +29,15 @@ const Timer = () => {
 
 	// Effect to save log to localStorage whenever log changes
 	useEffect(() => {
-		// Log the current log state before saving
 		console.log('Saving log to localStorage...', log);
 
 		if (log.length === 0) {
 			console.warn('log is empty, preventing unintended save.');
-			return; // Prevent saving an empty log
+			return;
 		}
 
 		localStorage.setItem('timerLog', JSON.stringify(log));
-	}, [log]); // Run only when log changes
+	}, [log]);
 
 	const startTimer = () => {
 		if (!isRunning) {
@@ -66,7 +66,6 @@ const Timer = () => {
 		const inputNumber = parseInt(inputValue) || 0;
 		const newTime = time;
 
-		// Update log with both time and input value
 		const newLog = [...log, { time: newTime, input: inputNumber }];
 		console.log('Adding new log entry:', { time: newTime, input: inputNumber });
 		setLog(newLog);
@@ -86,6 +85,13 @@ const Timer = () => {
 		setInputValue(e.target.value);
 	};
 
+	const handleTimeChange = (e) => {
+		const timeParts = e.target.value.split(':').map((part) => parseInt(part, 10) || 0);
+		const newTimeInSeconds = timeParts[0] * 3600 + timeParts[1] * 60 + timeParts[2];
+		setTime(newTimeInSeconds);
+		setIsEditingTime(false);
+	};
+
 	const formatTime = (totalSeconds) => {
 		const hours = Math.floor(totalSeconds / 3600);
 		const minutes = Math.floor((totalSeconds % 3600) / 60);
@@ -97,28 +103,43 @@ const Timer = () => {
 
 	return (
 		<div className="p-4">
-			<div className='flex flex-col items-center justify-center'>
+			<div className="flex flex-col items-center justify-center">
 				<h1 className="text-2xl font-bold mb-4">Timer</h1>
-				<span className="text-xl">{time} сек</span>
+				{isEditingTime ? (
+					<input
+						type="text"
+						className="text-xl text-center"
+						defaultValue={formatTime(time)}
+						onBlur={handleTimeChange}
+						autoFocus
+					/>
+				) : (
+					<span
+						className="text-xl cursor-pointer"
+						onClick={() => setIsEditingTime(true)}
+					>
+						{formatTime(time)}
+					</span>
+				)}
 			</div>
 
 			<div className="mb-4">
 				<div className="mt-2 flex justify-center gap-2.5">
 					<button
 						onClick={startTimer}
-						className="bg-green-500 w-1/4 h-12 text-white px-4 py-2 rounded "
+						className="bg-green-500 w-1/4 h-12 text-white px-4 py-2 rounded"
 					>
 						Старт
 					</button>
 					<button
 						onClick={stopTimer}
-						className="bg-red-500 w-1/4 h-12 text-white px-4 py-2 rounded "
+						className="bg-red-500 w-1/4 h-12 text-white px-4 py-2 rounded"
 					>
 						Стоп
 					</button>
 					<button
 						onClick={restartTimer}
-						className="bg-yellow-500 w-1/4 h-12 text-white px-4 py-2 rounded "
+						className="bg-yellow-500 w-1/4 h-12 text-white px-4 py-2 rounded"
 					>
 						Рестарт
 					</button>
@@ -133,7 +154,7 @@ const Timer = () => {
 				</button>
 				<button
 					onClick={clearLog}
-					className="bg-gray-500 w-5/12 h-12 text-white px-4 py-2 rounded "
+					className="bg-gray-500 w-5/12 h-12 text-white px-4 py-2 rounded"
 				>
 					Очистити журнал
 				</button>
@@ -149,7 +170,7 @@ const Timer = () => {
 			<ul className="list-disc pl-5 mb-4">
 				{log.map((entry, index) => (
 					<li key={index}>
-						{entry.time} сек (Число з інпуту: {entry.input})
+						{formatTime(entry.time)} (Число з інпуту: {entry.input})
 					</li>
 				))}
 			</ul>
