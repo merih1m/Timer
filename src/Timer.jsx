@@ -1,18 +1,20 @@
 import { useState, useRef, useEffect } from 'react';
 
 const Timer = () => {
-	const [time, setTime] = useState(0); // Timer state
+	const [time, setTime] = useState(0);
 	const [isRunning, setIsRunning] = useState(false);
 	const [log, setLog] = useState([]);
 	const [totalTime, setTotalTime] = useState(0);
 	const [inputValue, setInputValue] = useState('');
 	const [totalInputValue, setTotalInputValue] = useState(0);
-	const [isEditingTime, setIsEditingTime] = useState(false); // State to toggle edit mode
+	const [isEditingTime, setIsEditingTime] = useState(false);
+	const [minRandomTime, setMinRandomTime] = useState('00:01:30');
+	const [maxRandomTime, setMaxRandomTime] = useState('00:02:55');
+	const [tableEntries, setTableEntries] = useState([]);
 	const intervalRef = useRef(null);
 
-	// Effect to initialize log from localStorage
 	useEffect(() => {
-		console.log('Retrieving log from localStorage...');
+		console.log('Retrieving log and table entries from localStorage...');
 		try {
 			const savedLog = JSON.parse(localStorage.getItem('timerLog')) || [];
 			console.log('Retrieved log:', savedLog);
@@ -22,25 +24,32 @@ const Timer = () => {
 			const savedTotalInputValue = savedLog.reduce((acc, entry) => acc + entry.input, 0);
 			setTotalTime(savedTotalTime);
 			setTotalInputValue(savedTotalInputValue);
+
+			const savedTableEntries = JSON.parse(localStorage.getItem('tableEntries')) || [];
+			console.log('Retrieved table entries:', savedTableEntries);
+			setTableEntries(savedTableEntries);
 		} catch (error) {
 			console.error('Error parsing localStorage data:', error);
 		}
 	}, []);
 
-	// Effect to save log to localStorage whenever log changes
 	useEffect(() => {
 		console.log('Saving log to localStorage...', log);
-
-		if (log.length === 0) {
-			console.warn('log is empty, preventing unintended save.');
-			return;
+		if (log.length > 0) {
+			localStorage.setItem('timerLog', JSON.stringify(log));
 		}
-
-		localStorage.setItem('timerLog', JSON.stringify(log));
 	}, [log]);
+
+	useEffect(() => {
+		console.log('Saving table entries to localStorage...', tableEntries);
+		if (tableEntries.length > 0) {
+			localStorage.setItem('tableEntries', JSON.stringify(tableEntries));
+		}
+	}, [tableEntries]);
 
 	const startTimer = () => {
 		if (!isRunning) {
+			console.log('Starting timer...');
 			setIsRunning(true);
 			intervalRef.current = setInterval(() => {
 				setTime((prevTime) => prevTime + 1);
@@ -50,12 +59,14 @@ const Timer = () => {
 
 	const stopTimer = () => {
 		if (isRunning) {
+			console.log('Stopping timer...');
 			clearInterval(intervalRef.current);
 			setIsRunning(false);
 		}
 	};
 
 	const restartTimer = () => {
+		console.log('Restarting timer...');
 		clearInterval(intervalRef.current);
 		setTime(0);
 		setIsRunning(false);
@@ -65,7 +76,6 @@ const Timer = () => {
 	const logTime = () => {
 		const inputNumber = parseInt(inputValue) || 0;
 		const newTime = time;
-
 		const newLog = [...log, { time: newTime, input: inputNumber }];
 		console.log('Adding new log entry:', { time: newTime, input: inputNumber });
 		setLog(newLog);
@@ -81,15 +91,40 @@ const Timer = () => {
 		localStorage.removeItem('timerLog');
 	};
 
+	const clearTableEntries = () => {
+		console.log('Clearing table entries...');
+		setTableEntries([]);
+		localStorage.removeItem('tableEntries');
+	};
+
 	const handleInputChange = (e) => {
 		setInputValue(e.target.value);
+		console.log('Input value changed:', e.target.value);
 	};
 
 	const handleTimeChange = (e) => {
 		const timeParts = e.target.value.split(':').map((part) => parseInt(part, 10) || 0);
 		const newTimeInSeconds = timeParts[0] * 3600 + timeParts[1] * 60 + timeParts[2];
+		console.log('Time changed:', newTimeInSeconds);
 		setTime(newTimeInSeconds);
 		setIsEditingTime(false);
+	};
+
+	const handleRandomTime = () => {
+		const minTimeParts = minRandomTime.split(':').map((part) => parseInt(part, 10) || 0);
+		const maxTimeParts = maxRandomTime.split(':').map((part) => parseInt(part, 10) || 0);
+
+		const minTimeInSeconds = minTimeParts[0] * 3600 + minTimeParts[1] * 60 + minTimeParts[2];
+		const maxTimeInSeconds = maxTimeParts[0] * 3600 + maxTimeParts[1] * 60 + maxTimeParts[2];
+
+		if (minTimeInSeconds > maxTimeInSeconds) {
+			alert('Мінімальний час не може бути більшим за максимальний час.');
+			return;
+		}
+
+		const randomTime = Math.floor(Math.random() * (maxTimeInSeconds - minTimeInSeconds + 1) + minTimeInSeconds);
+		console.log('Generated random time:', randomTime);
+		setTime(randomTime);
 	};
 
 	const formatTime = (totalSeconds) => {
@@ -99,6 +134,30 @@ const Timer = () => {
 		return `${hours.toString().padStart(2, '0')}:${minutes
 			.toString()
 			.padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+	};
+
+	const addEntryToTable = () => {
+		console.log('Adding entry to table:', {
+			number: tableEntries.length + 1,
+			totalTime,
+			totalInputValue,
+		});
+		setTableEntries([
+			...tableEntries,
+			{
+				number: tableEntries.length + 1,
+				totalTime,
+				totalInputValue,
+				editableNumber: '', // New field for user input
+			},
+		]);
+	};
+
+	const handleEditableNumberChange = (index, value) => {
+		console.log(`Updating entry ${index} editable number to: ${value}`);
+		const updatedEntries = [...tableEntries];
+		updatedEntries[index].editableNumber = value;
+		setTableEntries(updatedEntries);
 	};
 
 	return (
@@ -145,6 +204,7 @@ const Timer = () => {
 					</button>
 				</div>
 			</div>
+
 			<div className="mt-2 flex justify-center gap-2.5">
 				<button
 					onClick={logTime}
@@ -156,27 +216,90 @@ const Timer = () => {
 					onClick={clearLog}
 					className="bg-gray-500 w-5/12 h-12 text-white px-4 py-2 rounded"
 				>
-					Очистити журнал
+					Очистити лог
 				</button>
 			</div>
-			<input
-				type="number"
-				value={inputValue}
-				onChange={handleInputChange}
-				className="border p-2 rounded w-full bg-slate-900"
-				placeholder="Введіть число"
-			/>
-			<h2 className="text-xl mb-2">Журнал:</h2>
-			<ul className="list-disc pl-5 mb-4">
-				{log.map((entry, index) => (
-					<li key={index}>
-						{formatTime(entry.time)} (Число з інпуту: {entry.input})
-					</li>
-				))}
-			</ul>
-			<h3 className="text-lg mb-2">
-				Загальний час: {formatTime(totalTime)} (Загальна сума чисел з інпуту: {totalInputValue})
-			</h3>
+
+			<div>
+				<h2 className="text-xl mb-2">Лог часу:</h2>
+				<ul>
+					{log.map((entry, index) => (
+						<li key={index}>
+							Час: {formatTime(entry.time)}, Сума: {entry.input}
+						</li>
+					))}
+				</ul>
+			</div>
+			<div className="mt-4">
+				<h2 className="text-xl mb-2">Генератор випадкового часу:</h2>
+				<input
+					type="text"
+					value={minRandomTime}
+					onChange={(e) => setMinRandomTime(e.target.value)}
+					placeholder="Мін. час (гг:хх:сс)"
+					className="border p-2 rounded mb-2 w-full"
+				/>
+				<input
+					type="text"
+					value={maxRandomTime}
+					onChange={(e) => setMaxRandomTime(e.target.value)}
+					placeholder="Макс. час (гг:хх:сс)"
+					className="border p-2 rounded mb-2 w-full"
+				/>
+				<button
+					onClick={handleRandomTime}
+					className="bg-purple-500 w-full h-12 text-white px-4 py-2 rounded"
+				>
+					Згенерувати випадковий час
+				</button>
+			</div>
+
+			<div className='flex gap-1.5 mt-5'>
+				<h2 className="text-lg mt-4 ">
+					Загальний час: {formatTime(totalTime)} (Загальна сума картинок: {totalInputValue})</h2>
+				<button
+					onClick={addEntryToTable}
+					className="ml-4 w-44 h-12 bg-blue-500 text-white text-sm px-4 py-2 rounded"
+				>
+					Додати до таблиці
+				</button>
+				<button
+					onClick={clearTableEntries}
+					className="ml-4 w-44 h-12 bg-red-500 text-white text-sm px-4 py-2 rounded mb-4"
+				>
+					Очистити таблицю
+				</button>
+			</div>
+
+			<div className="mt-4">
+
+				<table className="w-full border-collapse">
+					<thead>
+						<tr>
+							<th className="border px-4 py-2">№</th>
+							<th className="border px-4 py-2">Загальний час</th>
+							<th className="border px-4 py-2">Загальна сума картинок</th>
+						</tr>
+					</thead>
+					<tbody>
+						{tableEntries.map((entry, index) => (
+							<tr key={index}>
+								<td className="border px-4 py-2">
+									<input
+										type="number"
+										value={entry.editableNumber}
+										onChange={(e) => handleEditableNumberChange(index, e.target.value)}
+										className="border p-1 rounded"
+										onBlur={() => console.log(`Blurred input ${index} value: ${entry.editableNumber}`)}
+									/>
+								</td>
+								<td className="border px-4 py-2">{formatTime(entry.totalTime)}</td>
+								<td className="border px-4 py-2">{entry.totalInputValue}</td>
+							</tr>
+						))}
+					</tbody>
+				</table>
+			</div>
 		</div>
 	);
 };
