@@ -261,7 +261,7 @@ const Timer = () => {
 
 			<div>
 				<h2 className="text-xl mb-2">Лог часу:</h2>
-				<ul>
+				<ul className="flex flex-col-reverse">
 					{log.map((entry, index) => (
 						<li className='list-decimal' key={index}>
 							Час: {formatTime(entry.time)}, Кількість картинок: {entry.input}
