@@ -171,31 +171,48 @@ const Timer = () => {
 					{isEditingTime ? (
 						<input
 							type="text"
-							className="text-xl text-center border p-2 rounded"
+							className="text-xl text-center border p-2 rounded w-28"
 							defaultValue={formatTime(time)}
 							onBlur={handleTimeChange}
 							autoFocus
 						/>
 					) : (
 						<span
-							className="text-xl cursor-pointer"
+							className="text-xl cursor-pointer w-28 text-center" // Fixed width class
 							onClick={() => setIsEditingTime(true)}
 						>
 							{formatTime(time)}
 						</span>
 					)}
-
 					<span className="text-xl">|</span>
-
 					<input
 						type="number"
 						value={inputValue}
 						onChange={handleInputChange}
-						className="text-xl text-center bg-transparent outline-none w-1/6 focus:bg-[rgb(18,18,18)] focus:border focus:border-gray-300 focus:rounded focus:p-1"
+						className="text-xl text-center bg-transparent outline-none w-28 focus:bg-[rgb(18,18,18)] focus:border focus:border-gray-300 focus:rounded focus:p-1"
 					/>
-
+				</div>
+				<div className="flex flex-col items-center mb-2">
+					<div className="flex justify-center items-center space-x-4">
+						<input
+							type="text"
+							value={minRandomTime}
+							onChange={(e) => setMinRandomTime(e.target.value)}
+							placeholder="Мін. час (гг:хх:сс)"
+							className="text-xl text-center bg-transparent outline-none w-28 focus:bg-[rgb(18,18,18)] focus:border focus:border-gray-300 focus:rounded focus:p-1"
+						/>
+						<span className="text-xl mx-2">|</span>
+						<input
+							type="text"
+							value={maxRandomTime}
+							onChange={(e) => setMaxRandomTime(e.target.value)}
+							placeholder="Макс. час (гг:хх:сс)"
+							className="text-xl text-center bg-transparent outline-none w-28 focus:bg-[rgb(18,18,18)] focus:border focus:border-gray-300 focus:rounded focus:p-1"
+						/>
+					</div>
 				</div>
 			</div>
+
 
 			<div className="mb-4">
 				<div className="mt-2 flex justify-center gap-2.5">
@@ -220,7 +237,7 @@ const Timer = () => {
 				</div>
 			</div>
 
-			<div className="mt-2 flex justify-center gap-2.5">
+			<div className="mt-2 flex  gap-2.5">
 				<button
 					onClick={logTime}
 					className="bg-blue-500 w-5/12 h-12 text-white px-4 py-2 rounded mb-4"
@@ -233,31 +250,14 @@ const Timer = () => {
 				>
 					Очистити лог
 				</button>
-			</div>
-
-			<div className="mt-4">
-				<h2 className="text-xl mb-2">Генератор випадкового часу:</h2>
-				<input
-					type="text"
-					value={minRandomTime}
-					onChange={(e) => setMinRandomTime(e.target.value)}
-					placeholder="Мін. час (гг:хх:сс)"
-					className="border p-2 rounded mb-2 w-full"
-				/>
-				<input
-					type="text"
-					value={maxRandomTime}
-					onChange={(e) => setMaxRandomTime(e.target.value)}
-					placeholder="Макс. час (гг:хх:сс)"
-					className="border p-2 rounded mb-2 w-full"
-				/>
 				<button
 					onClick={handleRandomTime}
-					className="bg-purple-500 w-full h-12 text-white px-4 py-2 rounded"
+					className="bg-purple-500 w-1/3 h-12 text-white px-4 py-2 rounded"
 				>
 					Згенерувати випадковий час
 				</button>
 			</div>
+
 
 			<div>
 				<h2 className="text-xl mb-2">Лог часу:</h2>
@@ -319,7 +319,7 @@ const Timer = () => {
 					</tbody>
 				</table>
 			</div>
-		</div>
+		</div >
 	);
 };
 
