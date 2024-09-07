@@ -270,22 +270,27 @@ const Timer = () => {
 				</ul>
 			</div>
 
-			<div className='flex gap-1.5 mt-5'>
-				<h2 className="text-lg mt-4 ">
-					Загальний час: {formatTime(totalTime)} (Загальна сума картинок: {totalInputValue})</h2>
-				<button
-					onClick={addEntryToTable}
-					className="ml-4 w-44 h-12 bg-blue-500 text-white text-sm px-4 py-2 rounded"
-				>
-					Додати до таблиці
-				</button>
-				<button
-					onClick={clearTableEntries}
-					className="ml-4 w-44 h-12 bg-red-500 text-white text-sm px-4 py-2 rounded mb-4"
-				>
-					Очистити таблицю
-				</button>
+			<div className='flex flex-col items-center justify-center gap-1.5 mt-5'>
+				<h2 className="text-lg mt-4 text-center">
+					Загальний час: {formatTime(totalTime)} (Загальна сума картинок: {totalInputValue})
+				</h2>
+				<div className='flex  gap-2.5'>
+					<button
+						onClick={addEntryToTable}
+						className="w-44 h-12 bg-blue-500 text-white text-sm px-4 py-2 rounded mt-4"
+					>
+						Додати до таблиці
+					</button>
+					<button
+						onClick={clearTableEntries}
+						className="w-44 h-12 bg-red-500 text-white text-sm px-4 py-2 rounded mb-4 mt-4"
+					>
+						Очистити таблицю
+					</button>
+				</div>
+
 			</div>
+
 			<div className="mt-4">
 				<table className="w-full border-collapse">
 					<thead>
