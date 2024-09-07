@@ -84,17 +84,22 @@ const Timer = () => {
 	};
 
 	const clearLog = () => {
-		console.log('Clear log called');
-		setLog([]);
-		setTotalTime(0);
-		setTotalInputValue(0);
-		localStorage.removeItem('timerLog');
+		if (window.confirm('Ви впевнені, що хочете очистити журнал?')) {
+			console.log('Clear log called');
+			setLog([]);
+			setTotalTime(0);
+			setTotalInputValue(0);
+			localStorage.removeItem('timerLog');
+		}
 	};
 
+
 	const clearTableEntries = () => {
-		console.log('Clearing table entries...');
-		setTableEntries([]);
-		localStorage.removeItem('tableEntries');
+		if (window.confirm('Ви впевнені, що хочете очистити таблицю?')) {
+			console.log('Clearing table entries...');
+			setTableEntries([]);
+			localStorage.removeItem('tableEntries');
+		}
 	};
 
 	const handleInputChange = (e) => {
@@ -163,8 +168,19 @@ const Timer = () => {
 		return formatTime(Math.round(averageTime));
 	};
 
+	const handleDelete = (index) => {
+		const newLog = log.filter((_, i) => i !== index);
+		console.log('Deleting log entry at index:', index);
+		setLog(newLog);
+		const newTotalTime = newLog.reduce((acc, entry) => acc + entry.time, 0);
+		const newTotalInputValue = newLog.reduce((acc, entry) => acc + entry.input, 0);
+		setTotalTime(newTotalTime);
+		setTotalInputValue(newTotalInputValue);
+		localStorage.setItem('timerLog', JSON.stringify(newLog));
+	};
+
 	return (
-		<div className="p-4">
+		<div className="p-4 font-sans">
 			<div className="flex flex-col items-center justify-center">
 				<h1 className="text-2xl font-bold mb-4">Timer</h1>
 				<div className="flex justify-center items-center space-x-4">
@@ -178,7 +194,7 @@ const Timer = () => {
 						/>
 					) : (
 						<span
-							className="text-xl cursor-pointer w-28 text-center" // Fixed width class
+							className="text-xl cursor-pointer w-28 text-center"
 							onClick={() => setIsEditingTime(true)}
 						>
 							{formatTime(time)}
@@ -212,7 +228,6 @@ const Timer = () => {
 					</div>
 				</div>
 			</div>
-
 
 			<div className="mb-4">
 				<div className="mt-2 flex justify-center gap-2.5">
@@ -258,17 +273,25 @@ const Timer = () => {
 				</button>
 			</div>
 
-
 			<div>
 				<h2 className="text-xl mb-2">Лог часу:</h2>
-				<ul className="flex flex-col-reverse">
+				<ul className="flex flex-col-reverse list-inside">
 					{log.map((entry, index) => (
-						<li className='list-decimal' key={index}>
-							Час: {formatTime(entry.time)}, Кількість картинок: {entry.input}
+						<li key={index} className="flex items-center  relative group">
+							<span className='font-mono'>{String(index + 1)}.</span>
+							<span> Час: {formatTime(entry.time)}, Кількість картинок: {entry.input}</span>
+							<button
+								className="bg-red-500 hover:bg-red-700 text-white text-3xl rounded-full w-6 h-6 flex items-center justify-center ml-2 opacity-0 group-hover:opacity-100 transition-opacity p-0"
+								onClick={() => handleDelete(index)}
+							>
+								<span className="text-xs">-</span>
+							</button>
+
 						</li>
 					))}
 				</ul>
 			</div>
+
 
 			<div className='flex flex-col items-center justify-center gap-1.5 mt-5'>
 				<h2 className="text-lg mt-4 text-center">
@@ -288,7 +311,6 @@ const Timer = () => {
 						Очистити таблицю
 					</button>
 				</div>
-
 			</div>
 
 			<div className="mt-4">
@@ -310,7 +332,7 @@ const Timer = () => {
 										type="number"
 										value={entry.editableNumber}
 										onChange={(e) => handleEditableNumberChange(index, e.target.value)}
-										className="border p-1 rounded"
+										className="text-center bg-transparent outline-none w-28 focus:bg-[rgb(18,18,18)] focus:border focus:border-gray-300 focus:rounded focus:p-1"
 									/>
 								</td>
 								<td className="border px-4 py-2">{formatTime(entry.totalTime)}</td>
@@ -324,7 +346,7 @@ const Timer = () => {
 					</tbody>
 				</table>
 			</div>
-		</div >
+		</div>
 	);
 };
 
