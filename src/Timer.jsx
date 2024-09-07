@@ -252,7 +252,7 @@ const Timer = () => {
 				</button>
 				<button
 					onClick={handleRandomTime}
-					className="bg-purple-500 w-1/3 h-12 text-white px-4 py-2 rounded"
+					className="bg-purple-500 w-5/12 h-12 text-white px-4 py-2 rounded"
 				>
 					Згенерувати випадковий час
 				</button>
