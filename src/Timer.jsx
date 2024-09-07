@@ -240,19 +240,19 @@ const Timer = () => {
 			<div className="mt-2 flex  gap-2.5">
 				<button
 					onClick={logTime}
-					className="bg-blue-500 w-5/12 h-12 text-white px-4 py-2 rounded mb-4"
+					className="bg-blue-500 w-4/12 h-12 text-white px-4 py-2 rounded mb-4"
 				>
 					Записати час
 				</button>
 				<button
 					onClick={clearLog}
-					className="bg-gray-500 w-5/12 h-12 text-white px-4 py-2 rounded"
+					className="bg-gray-500 w-4/12 h-12 text-white px-4 py-2 rounded"
 				>
 					Очистити лог
 				</button>
 				<button
 					onClick={handleRandomTime}
-					className="bg-purple-500 w-5/12 h-12 text-white px-4 py-2 rounded"
+					className="bg-purple-500 w-4/12 h-12 text-white px-4 py-2 rounded"
 				>
 					Згенерувати випадковий час
 				</button>
