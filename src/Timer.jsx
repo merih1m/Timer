@@ -1,11 +1,11 @@
-import { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 const Timer = () => {
 	const [time, setTime] = useState(0);
 	const [isRunning, setIsRunning] = useState(false);
 	const [log, setLog] = useState([]);
 	const [totalTime, setTotalTime] = useState(0);
-	const [inputValue, setInputValue] = useState('');
+	const [inputValue, setInputValue] = useState(30);
 	const [totalInputValue, setTotalInputValue] = useState(0);
 	const [isEditingTime, setIsEditingTime] = useState(false);
 	const [minRandomTime, setMinRandomTime] = useState('00:01:30');
@@ -137,20 +137,17 @@ const Timer = () => {
 	};
 
 	const addEntryToTable = () => {
-		console.log('Adding entry to table:', {
+		const currentDate = new Date().toLocaleDateString('uk-UA');
+		const newEntry = {
 			number: tableEntries.length + 1,
 			totalTime,
 			totalInputValue,
-		});
-		setTableEntries([
-			...tableEntries,
-			{
-				number: tableEntries.length + 1,
-				totalTime,
-				totalInputValue,
-				editableNumber: '', // New field for user input
-			},
-		]);
+			date: currentDate,
+			averageTime: calculateAverageTime(totalTime, log.length),
+			editableNumber: '',
+		};
+		console.log('Adding entry to table:', newEntry);
+		setTableEntries([...tableEntries, newEntry]);
 	};
 
 	const handleEditableNumberChange = (index, value) => {
@@ -160,26 +157,44 @@ const Timer = () => {
 		setTableEntries(updatedEntries);
 	};
 
+	const calculateAverageTime = (totalTime, logLength) => {
+		if (logLength === 0) return 'N/A';
+		const averageTime = totalTime / logLength;
+		return formatTime(Math.round(averageTime));
+	};
+
 	return (
 		<div className="p-4">
 			<div className="flex flex-col items-center justify-center">
 				<h1 className="text-2xl font-bold mb-4">Timer</h1>
-				{isEditingTime ? (
+				<div className="flex justify-center items-center space-x-4">
+					{isEditingTime ? (
+						<input
+							type="text"
+							className="text-xl text-center border p-2 rounded"
+							defaultValue={formatTime(time)}
+							onBlur={handleTimeChange}
+							autoFocus
+						/>
+					) : (
+						<span
+							className="text-xl cursor-pointer"
+							onClick={() => setIsEditingTime(true)}
+						>
+							{formatTime(time)}
+						</span>
+					)}
+
+					<span className="text-xl">|</span>
+
 					<input
-						type="text"
-						className="text-xl text-center"
-						defaultValue={formatTime(time)}
-						onBlur={handleTimeChange}
-						autoFocus
+						type="number"
+						value={inputValue}
+						onChange={handleInputChange}
+						className="text-xl text-center bg-transparent outline-none w-1/6 focus:bg-[rgb(18,18,18)] focus:border focus:border-gray-300 focus:rounded focus:p-1"
 					/>
-				) : (
-					<span
-						className="text-xl cursor-pointer"
-						onClick={() => setIsEditingTime(true)}
-					>
-						{formatTime(time)}
-					</span>
-				)}
+
+				</div>
 			</div>
 
 			<div className="mb-4">
@@ -224,8 +239,8 @@ const Timer = () => {
 				<h2 className="text-xl mb-2">Лог часу:</h2>
 				<ul>
 					{log.map((entry, index) => (
-						<li key={index}>
-							Час: {formatTime(entry.time)}, Сума: {entry.input}
+						<li className='list-decimal' key={index}>
+							Час: {formatTime(entry.time)}, Кількість картинок: {entry.input}
 						</li>
 					))}
 				</ul>
@@ -270,15 +285,15 @@ const Timer = () => {
 					Очистити таблицю
 				</button>
 			</div>
-
 			<div className="mt-4">
-
 				<table className="w-full border-collapse">
 					<thead>
 						<tr>
 							<th className="border px-4 py-2">№</th>
 							<th className="border px-4 py-2">Загальний час</th>
 							<th className="border px-4 py-2">Загальна сума картинок</th>
+							<th className="border px-4 py-2">Дата</th>
+							<th className="border px-4 py-2">Середній час на один батч</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -290,11 +305,14 @@ const Timer = () => {
 										value={entry.editableNumber}
 										onChange={(e) => handleEditableNumberChange(index, e.target.value)}
 										className="border p-1 rounded"
-										onBlur={() => console.log(`Blurred input ${index} value: ${entry.editableNumber}`)}
 									/>
 								</td>
 								<td className="border px-4 py-2">{formatTime(entry.totalTime)}</td>
 								<td className="border px-4 py-2">{entry.totalInputValue}</td>
+								<td className="border px-4 py-2">{entry.date}</td>
+								<td className="border px-4 py-2">
+									{entry.averageTime || 'N/A'}
+								</td>
 							</tr>
 						))}
 					</tbody>
