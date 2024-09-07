@@ -235,16 +235,6 @@ const Timer = () => {
 				</button>
 			</div>
 
-			<div>
-				<h2 className="text-xl mb-2">Лог часу:</h2>
-				<ul>
-					{log.map((entry, index) => (
-						<li className='list-decimal' key={index}>
-							Час: {formatTime(entry.time)}, Кількість картинок: {entry.input}
-						</li>
-					))}
-				</ul>
-			</div>
 			<div className="mt-4">
 				<h2 className="text-xl mb-2">Генератор випадкового часу:</h2>
 				<input
@@ -267,6 +257,17 @@ const Timer = () => {
 				>
 					Згенерувати випадковий час
 				</button>
+			</div>
+
+			<div>
+				<h2 className="text-xl mb-2">Лог часу:</h2>
+				<ul>
+					{log.map((entry, index) => (
+						<li className='list-decimal' key={index}>
+							Час: {formatTime(entry.time)}, Кількість картинок: {entry.input}
+						</li>
+					))}
+				</ul>
 			</div>
 
 			<div className='flex gap-1.5 mt-5'>
