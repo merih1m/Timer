@@ -182,6 +182,15 @@ const Timer = () => {
 		localStorage.setItem('timerLog', JSON.stringify(newLog));
 	};
 
+	const deleteTableEntry = (index) => {
+		if (window.confirm('Ви впевнені, що хочете очистити стрічку?')) {
+			const newEntries = tableEntries.filter((_, i) => i !== index);
+			console.log('Deleting table entry at index:', index);
+			setTableEntries(newEntries);
+			localStorage.setItem('tableEntries', JSON.stringify(newEntries));
+		}
+	};
+
 	return (
 		<div className="p-4 font-sans">
 			<div className="flex flex-col items-center justify-center">
@@ -326,6 +335,7 @@ const Timer = () => {
 							<th className="border px-4 py-2">Загальна сума картинок</th>
 							<th className="border px-4 py-2">Дата</th>
 							<th className="border px-4 py-2">Середній час на один батч</th>
+							<th className="border px-4 py-2">Дія</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -345,6 +355,14 @@ const Timer = () => {
 								<td className="border px-4 py-2">{entry.date}</td>
 								<td className="border px-4 py-2">
 									{entry.averageTime || 'N/A'}
+								</td>
+								<td className="border px-4 py-2 text-center">
+									<button
+										onClick={() => deleteTableEntry(index)}
+										className="bg-red-500 hover:bg-red-700 text-white text-sm px-2 py-1 rounded"
+									>
+										Видалити
+									</button>
 								</td>
 							</tr>
 						))}
