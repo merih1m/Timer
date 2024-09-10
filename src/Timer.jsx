@@ -143,10 +143,13 @@ const Timer = () => {
 
 	const addEntryToTable = () => {
 		const currentDate = new Date().toLocaleDateString('uk-UA');
+		const packsValue = String(log.length); // Зберігаємо значення "Загальна сума паків"
+
 		const newEntry = {
 			number: tableEntries.length + 1,
 			totalTime,
 			totalInputValue,
+			packsValue,
 			date: currentDate,
 			averageTime: calculateAverageTime(totalTime, log.length),
 			editableNumber: '',
@@ -319,6 +322,7 @@ const Timer = () => {
 						<tr>
 							<th className="border px-4 py-2">№</th>
 							<th className="border px-4 py-2">Загальний час</th>
+							<th className="border px-4 py-2">Загальна сума бачів</th>
 							<th className="border px-4 py-2">Загальна сума картинок</th>
 							<th className="border px-4 py-2">Дата</th>
 							<th className="border px-4 py-2">Середній час на один батч</th>
@@ -336,6 +340,7 @@ const Timer = () => {
 									/>
 								</td>
 								<td className="border px-4 py-2">{formatTime(entry.totalTime)}</td>
+								<td className="border px-4 py-2">{entry.packsValue}</td>
 								<td className="border px-4 py-2">{entry.totalInputValue}</td>
 								<td className="border px-4 py-2">{entry.date}</td>
 								<td className="border px-4 py-2">
