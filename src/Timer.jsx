@@ -344,7 +344,7 @@ const Timer = () => {
 							<tr key={index}>
 								<td className="border px-4 py-2">
 									<input
-										type="number"
+										type="string"
 										value={entry.editableNumber}
 										onChange={(e) => handleEditableNumberChange(index, e.target.value)}
 										className="text-center bg-transparent outline-none w-28 focus:bg-[rgb(18,18,18)] focus:border focus:border-gray-300 focus:rounded focus:p-1"
