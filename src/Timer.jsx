@@ -143,7 +143,7 @@ const Timer = () => {
 
 	const addEntryToTable = () => {
 		const currentDate = new Date().toLocaleDateString('uk-UA');
-		const packsValue = String(log.length); // Зберігаємо значення "Загальна сума паків"
+		const packsValue = String(log.length);
 
 		const newEntry = {
 			number: tableEntries.length + 1,
@@ -152,6 +152,7 @@ const Timer = () => {
 			packsValue,
 			date: currentDate,
 			averageTime: calculateAverageTime(totalTime, log.length),
+			averageTimePerImage: calculateAverageTime(totalTime, totalInputValue),
 			editableNumber: '',
 		};
 		console.log('Adding entry to table:', newEntry);
@@ -324,7 +325,6 @@ const Timer = () => {
 					</button>
 				</div>
 			</div>
-
 			<div className="mt-4">
 				<table className="w-full border-collapse">
 					<thead>
@@ -335,6 +335,7 @@ const Timer = () => {
 							<th className="border px-4 py-2">Загальна сума картинок</th>
 							<th className="border px-4 py-2">Дата</th>
 							<th className="border px-4 py-2">Середній час на один батч</th>
+							<th className="border px-4 py-2">Середній час на одну картінку</th>
 							<th className="border px-4 py-2">Дія</th>
 						</tr>
 					</thead>
@@ -353,9 +354,8 @@ const Timer = () => {
 								<td className="border px-4 py-2">{entry.packsValue}</td>
 								<td className="border px-4 py-2">{entry.totalInputValue}</td>
 								<td className="border px-4 py-2">{entry.date}</td>
-								<td className="border px-4 py-2">
-									{entry.averageTime || 'N/A'}
-								</td>
+								<td className="border px-4 py-2">{entry.averageTime || 'N/A'}</td>
+								<td className="border px-4 py-2">{entry.averageTimePerImage || 'N/A'}</td>
 								<td className="border px-4 py-2 text-center">
 									<button
 										onClick={() => deleteTableEntry(index)}
