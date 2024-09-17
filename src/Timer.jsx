@@ -286,7 +286,7 @@ const Timer = () => {
 				</button>
 			</div>
 
-			<div>
+			<div className=''>
 				<h2 className="text-lg sm:text-xl mb-2">Лог часу:</h2>
 				<ul className="flex flex-col-reverse list-inside">
 					{log.map((entry, index) => (
