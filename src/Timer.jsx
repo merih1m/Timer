@@ -1,4 +1,4 @@
-import  { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 const Timer = () => {
 	const [time, setTime] = useState(0);
@@ -195,103 +195,103 @@ const Timer = () => {
 	return (
 		<div className="p-4 font-sans">
 			<div className="flex flex-col items-center justify-center">
-				<h1 className="text-2xl font-bold mb-4">Timer</h1>
-				<div className="flex justify-center items-center space-x-4">
+				<h1 className="text-lg sm:text-2xl font-bold mb-4">Timer</h1>
+				<div className="flex flex-col sm:flex-row justify-center items-center sm:space-x-4 space-y-2 sm:space-y-0">
 					{isEditingTime ? (
 						<input
 							type="text"
-							className="text-xl text-center border p-2 rounded w-28"
+							className="text-lg sm:text-xl text-center border p-2 rounded w-full sm:w-28"
 							defaultValue={formatTime(time)}
 							onBlur={handleTimeChange}
 							autoFocus
 						/>
 					) : (
 						<span
-							className="text-xl cursor-pointer w-28 text-center"
+							className="text-lg sm:text-xl cursor-pointer w-full sm:w-28 text-center"
 							onClick={() => setIsEditingTime(true)}
 						>
 							{formatTime(time)}
 						</span>
 					)}
-					<span className="text-xl">|</span>
+					<span className="text-lg sm:text-xl">|</span>
 					<input
 						type="number"
 						value={inputValue}
 						onChange={handleInputChange}
-						className="text-xl text-center bg-transparent outline-none w-28 focus:bg-[rgb(18,18,18)] focus:border focus:border-gray-300 focus:rounded focus:p-1"
+						className="text-lg sm:text-xl text-center bg-transparent outline-none w-full sm:w-28 focus:bg-[rgb(18,18,18)] focus:border focus:border-gray-300 focus:rounded focus:p-1"
 					/>
 				</div>
-				<div className="flex flex-col items-center mb-2">
-					<div className="flex justify-center items-center space-x-4">
+				<div className="flex flex-col items-center mb-2 space-y-2">
+					<div className="flex flex-col sm:flex-row justify-center items-center sm:space-x-4 space-y-2 sm:space-y-0">
 						<input
 							type="text"
 							value={minRandomTime}
 							onChange={(e) => setMinRandomTime(e.target.value)}
 							placeholder="Мін. час (гг:хх:сс)"
-							className="text-xl text-center bg-transparent outline-none w-28 focus:bg-[rgb(18,18,18)] focus:border focus:border-gray-300 focus:rounded focus:p-1"
+							className="text-lg sm:text-xl text-center bg-transparent outline-none w-full sm:w-28 focus:bg-[rgb(18,18,18)] focus:border focus:border-gray-300 focus:rounded focus:p-1"
 						/>
-						<span className="text-xl mx-2">|</span>
+						<span className="text-lg sm:text-xl mx-2">|</span>
 						<input
 							type="text"
 							value={maxRandomTime}
 							onChange={(e) => setMaxRandomTime(e.target.value)}
 							placeholder="Макс. час (гг:хх:сс)"
-							className="text-xl text-center bg-transparent outline-none w-28 focus:bg-[rgb(18,18,18)] focus:border focus:border-gray-300 focus:rounded focus:p-1"
+							className="text-lg sm:text-xl text-center bg-transparent outline-none w-full sm:w-28 focus:bg-[rgb(18,18,18)] focus:border focus:border-gray-300 focus:rounded focus:p-1"
 						/>
 					</div>
 				</div>
 			</div>
 
 			<div className="mb-4">
-				<div className="mt-2 flex justify-center gap-2.5">
+				<div className="mt-2 flex flex-col sm:flex-row justify-center gap-2.5 space-y-2 sm:space-y-0">
 					<button
 						onClick={startTimer}
-						className="bg-green-500 w-1/4 h-12 text-white px-4 py-2 rounded"
+						className="bg-green-500 w-full sm:w-1/4 h-12 text-white px-4 py-2 rounded"
 					>
 						Старт
 					</button>
 					<button
 						onClick={stopTimer}
-						className="bg-red-500 w-1/4 h-12 text-white px-4 py-2 rounded"
+						className="bg-red-500 w-full sm:w-1/4 h-12 text-white px-4 py-2 rounded"
 					>
 						Стоп
 					</button>
 					<button
 						onClick={restartTimer}
-						className="bg-yellow-500 w-1/4 h-12 text-white px-4 py-2 rounded"
+						className="bg-yellow-500 w-full sm:w-1/4 h-12 text-white px-4 py-2 rounded"
 					>
 						Рестарт
 					</button>
 				</div>
 			</div>
 
-			<div className="mt-2 flex justify-center  gap-2.5">
+			<div className="mt-2 flex flex-col sm:flex-row justify-center gap-2.5 space-y-2 sm:space-y-0">
 				<button
 					onClick={logTime}
-					className="bg-blue-500 w-5/12 h-12 text-white px-4 py-2 rounded mb-4"
+					className="bg-blue-500 w-full sm:w-3/12 h-12 text-white px-4 py-2 rounded"
 				>
 					Записати час
 				</button>
 				<button
 					onClick={clearLog}
-					className="bg-gray-500 w-5/12 h-12 text-white px-4 py-2 rounded"
+					className="bg-gray-500 w-full sm:w-3/12 h-12 text-white px-4 py-2 rounded"
 				>
 					Очистити лог
 				</button>
 				<button
 					onClick={handleRandomTime}
-					className="bg-purple-500 w-5/12 h-12 text-white px-4 py-2 rounded"
+					className="bg-purple-500 w-full sm:w-3/12 h-12 text-white px-4 py-2 rounded"
 				>
 					Рандомний час
 				</button>
 			</div>
 
 			<div>
-				<h2 className="text-xl mb-2">Лог часу:</h2>
+				<h2 className="text-lg sm:text-xl mb-2">Лог часу:</h2>
 				<ul className="flex flex-col-reverse list-inside">
 					{log.map((entry, index) => (
-						<li key={index} className="flex items-center  relative group">
-							<span className='font-mono'>{String(index + 1)}.</span>
+						<li key={index} className="flex items-center relative group">
+							<span className="font-mono">{String(index + 1)}.</span>
 							<span> Час: {formatTime(entry.time)}, Кількість картинок: {entry.input}</span>
 							<button
 								className="bg-red-500 hover:bg-red-700 text-white text-3xl rounded-full w-6 h-6 flex items-center justify-center ml-2 opacity-0 group-hover:opacity-100 transition-opacity p-0"
@@ -299,74 +299,111 @@ const Timer = () => {
 							>
 								<span className="text-xs">-</span>
 							</button>
-
 						</li>
 					))}
 				</ul>
 			</div>
 
-
-			<div className='flex flex-col items-center justify-center gap-1.5 mt-5'>
-				<h2 className="text-lg mt-4 text-center">
+			<div className="flex flex-col items-center justify-center gap-1.5 mt-5">
+				<h2 className="text-md sm:text-lg mt-4 text-center">
 					Загальний час: {formatTime(totalTime)} (Загальна сума картинок: {totalInputValue})
 				</h2>
-				<div className='flex  gap-2.5'>
+				<div className="flex gap-2.5">
 					<button
 						onClick={addEntryToTable}
-						className="w-44 h-12 bg-blue-500 text-white text-sm px-4 py-2 rounded mt-4"
+						className="w-full sm:w-44 h-12 bg-blue-500 text-white text-sm px-4 py-2 rounded mt-4"
 					>
 						Додати до таблиці
 					</button>
 					<button
 						onClick={clearTableEntries}
-						className="w-44 h-12 bg-red-500 text-white text-sm px-4 py-2 rounded mb-4 mt-4"
+						className="w-full sm:w-44 h-12 bg-red-500 text-white text-sm px-4 py-2 rounded mb-4 mt-4"
 					>
 						Очистити таблицю
 					</button>
 				</div>
 			</div>
-			<div className="mt-4">
-				<table className="w-full border-collapse">
+
+			<div className="mt-4 overflow-x-auto">
+				<table className="min-w-full border-collapse text-sm sm:text-base">
 					<thead>
-						<tr>
-							<th className="border px-4 py-2">№</th>
-							<th className="border px-4 py-2">Загальний час</th>
-							<th className="border px-4 py-2">Загальна сума бачів</th>
-							<th className="border px-4 py-2">Загальна сума картинок</th>
-							<th className="border px-4 py-2">Дата</th>
-							<th className="border px-4 py-2">Середній час на один батч</th>
-							<th className="border px-4 py-2">Середній час на одну картінку</th>
-							<th className="border px-4 py-2">Дія</th>
+						<tr className="bg-gray-800">
+							<th className="border px-1 sm:px-4 py-2 text-xs sm:text-sm">№</th>
+							<th className="border px-1 sm:px-4 py-2 text-xs sm:text-sm">Загальний час</th>
+							<th className="border px-1 sm:px-4 py-2 text-xs sm:text-sm">Загальна сума бачів</th>
+							<th className="border px-1 sm:px-4 py-2 text-xs sm:text-sm hidden sm:table-cell">Загальна сума картинок</th>
+							<th className="border px-1 sm:px-4 py-2 text-xs sm:text-sm hidden">Дата</th>
+							<th className="border px-1 sm:px-4 py-2 text-xs sm:text-sm sm:table-cell">Середній час на батч</th>
+							<th className="border px-1 sm:px-4 py-2 text-xs sm:text-sm hidden sm:table-cell">Середній час на картінку</th>
+							<th className="border px-1 sm:px-4 py-2 text-xs sm:text-sm">Дія</th>
 						</tr>
 					</thead>
 					<tbody>
 						{tableEntries.map((entry, index) => (
 							<tr key={index}>
-								<td className="border px-4 py-2">
+								<td className="border px-1 sm:px-4 py-2 text-center text-xs sm:text-sm">
 									<input
 										type="string"
 										value={entry.editableNumber}
 										onChange={(e) => handleEditableNumberChange(index, e.target.value)}
-										className="text-center bg-transparent outline-none w-28 focus:bg-[rgb(18,18,18)] focus:border focus:border-gray-300 focus:rounded focus:p-1"
+										className="text-center bg-transparent outline-none w-full sm:w-16 focus:bg-[rgb(18,18,18)] focus:border focus:border-gray-300 focus:rounded focus:p-1"
 									/>
 								</td>
-								<td className="border px-4 py-2">{formatTime(entry.totalTime)}</td>
-								<td className="border px-4 py-2">{entry.packsValue}</td>
-								<td className="border px-4 py-2">{entry.totalInputValue}</td>
-								<td className="border px-4 py-2">{entry.date}</td>
-								<td className="border px-4 py-2">{entry.averageTime || 'N/A'}</td>
-								<td className="border px-4 py-2">{entry.averageTimePerImage || 'N/A'}</td>
-								<td className="border px-4 py-2 text-center">
+								<td className="border px-1 sm:px-4 py-2 text-xs sm:text-sm">{formatTime(entry.totalTime)}</td>
+								<td className="border px-1 sm:px-4 py-2 text-xs sm:text-sm">{entry.packsValue}</td>
+								<td className="border px-1 sm:px-4 py-2 text-xs sm:text-sm hidden  sm:table-cell">{entry.totalInputValue}</td>
+								<td className="border px-1 sm:px-4 py-2 text-xs sm:text-sm hidden">{entry.date}</td>
+								<td className="border px-1 sm:px-4 py-2 text-xs sm:text-sm sm:table-cell">{entry.averageTime || 'N/A'}</td>
+								<td className="border px-1 sm:px-4 py-2 text-xs sm:text-sm hidden sm:table-cell">{entry.averageTimePerImage || 'N/A'}</td>
+								<td className="border px-1 sm:px-4 py-2 text-center text-xs sm:text-sm">
 									<button
 										onClick={() => deleteTableEntry(index)}
-										className="bg-red-500 hover:bg-red-700 text-white text-sm px-2 py-1 rounded"
+										className="bg-red-500 hover:bg-red-700 text-white text-xs sm:text-sm px-1 py-1 rounded"
 									>
 										Видалити
 									</button>
 								</td>
+
 							</tr>
 						))}
 					</tbody>
+					<tfoot>
+						<tr className="bg-gray-800">
+							<td className="border px-1 sm:px-4 py-2 text-xs sm:text-sm font-bold">Підсумок</td>
+							<td className="border px-1 sm:px-4 py-2 text-xs sm:text-sm font-bold">
+								{formatTime(tableEntries.reduce((acc, entry) => acc + entry.totalTime, 0))}
+							</td>
+							<td className="border px-1 sm:px-4 py-2 text-xs sm:text-sm font-bold">
+								{tableEntries.reduce((acc, entry) => acc + parseInt(entry.packsValue, 10), 0)}
+							</td>
+							<td className="border px-1 sm:px-4 py-2 text-xs sm:text-sm hidden sm:table-cell font-bold">
+								{tableEntries.reduce((acc, entry) => acc + entry.totalInputValue, 0)}
+							</td>
+							<td className="border px-1 sm:px-4 py-2 text-xs sm:text-sm hidden font-bold text-center">-</td>
+							<td className="border px-1 sm:px-4 py-2 text-xs sm:text-sm  font-bold">
+								{tableEntries.length > 0
+									? formatTime(
+										Math.round(
+											tableEntries.reduce((acc, entry) => {
+												const timeInSeconds = entry.totalTime / (log.length || 1);
+												console.logtimeInSeconds
+												return acc + timeInSeconds;
+											}, 0) / tableEntries.length
+										)
+									)
+									: 'N/A'}
+							</td>
+							<td className="border px-1 sm:px-4 py-2 text-xs sm:text-sm sm:table-cell hidden font-bold">
+								{tableEntries.reduce((acc, entry) => acc + entry.totalInputValue, 0) > 0
+									? calculateAverageTime(
+										tableEntries.reduce((acc, entry) => acc + entry.totalTime, 0),
+										tableEntries.reduce((acc, entry) => acc + entry.totalInputValue, 0)
+									)
+									: 'N/A'}
+							</td>
+							<td className="border px-3 py-2 text-xs font-bold text-center sm:px-4 sm:text-sm">-</td>
+						</tr>
+					</tfoot>
 				</table>
 			</div>
 		</div>
