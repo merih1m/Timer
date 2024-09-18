@@ -286,7 +286,7 @@ const Timer = () => {
 				</button>
 			</div>
 
-			<div className=''>
+			<div>
 				<h2 className="text-lg sm:text-xl mb-2">Лог часу:</h2>
 				<ul className="flex flex-col-reverse list-inside">
 					{log.map((entry, index) => (
@@ -341,12 +341,12 @@ const Timer = () => {
 					<tbody>
 						{tableEntries.map((entry, index) => (
 							<tr key={index}>
-								<td className="border px-1 sm:px-4 py-2 text-center text-xs sm:text-sm">
+								<td className="border px-2 sm:px-4 py-2 text-center text-xs sm:text-sm">
 									<input
 										type="string"
 										value={entry.editableNumber}
 										onChange={(e) => handleEditableNumberChange(index, e.target.value)}
-										className="text-center bg-transparent outline-none w-full sm:w-16 focus:bg-[rgb(18,18,18)] focus:border focus:border-gray-300 focus:rounded focus:p-1"
+										className="text-center bg-transparent outline-none w-full sm:w-[80px] focus:bg-[rgb(18,18,18)] focus:border focus:border-gray-300 focus:rounded focus:p-1"
 									/>
 								</td>
 								<td className="border px-1 sm:px-4 py-2 text-xs sm:text-sm">{formatTime(entry.totalTime)}</td>
