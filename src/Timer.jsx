@@ -11,7 +11,10 @@ const Timer = () => {
 	const [minRandomTime, setMinRandomTime] = useState('00:01:30');
 	const [maxRandomTime, setMaxRandomTime] = useState('00:02:55');
 	const [tableEntries, setTableEntries] = useState([]);
+	const [isFilteredByDate, setIsFilteredByDate] = useState(false);
 	const intervalRef = useRef(null);
+
+	const currentDate = new Date().toLocaleDateString('uk-UA');
 
 	useEffect(() => {
 		console.log('Retrieving log and table entries from localStorage...');
@@ -142,7 +145,6 @@ const Timer = () => {
 	};
 
 	const addEntryToTable = () => {
-		const currentDate = new Date().toLocaleDateString('uk-UA');
 		const packsValue = String(log.length);
 
 		const newEntry = {
@@ -191,6 +193,17 @@ const Timer = () => {
 			localStorage.setItem('tableEntries', JSON.stringify(newEntries));
 		}
 	};
+
+
+	// Фільтр для таблиці по даті
+	const toggleDateFilter = () => {
+		setIsFilteredByDate(!isFilteredByDate);
+	};
+
+	// Фільтровані записи таблиці
+	const filteredTableEntries = isFilteredByDate
+		? tableEntries.filter(entry => entry.date === currentDate)
+		: tableEntries;
 
 	return (
 		<div className="p-4 font-sans">
@@ -332,14 +345,19 @@ const Timer = () => {
 							<th className="border px-1 sm:px-4 py-2 text-xs sm:text-sm">Загальний час</th>
 							<th className="border px-1 sm:px-4 py-2 text-xs sm:text-sm">Загальна сума бачів</th>
 							<th className="border px-1 sm:px-4 py-2 text-xs sm:text-sm hidden sm:table-cell">Загальна сума картинок</th>
-							<th className="border px-1 sm:px-4 py-2 text-xs sm:text-sm hidden sm:table-cell">Дата</th>
+							<th
+								onClick={toggleDateFilter} // Додаємо клік для фільтрації
+								className="border px-1 sm:px-4 py-2 text-xs sm:text-sm hidden sm:table-cell cursor-pointer hover:bg-gray-700"
+							>
+								Дата {isFilteredByDate ? "(Сьогодні)" : ""}
+							</th>
 							<th className="border px-1 sm:px-4 py-2 text-xs sm:text-sm sm:table-cell">Середній час на батч</th>
 							<th className="border px-1 sm:px-4 py-2 text-xs sm:text-sm hidden sm:table-cell">Середній час на картінку</th>
 							<th className="border px-1 sm:px-4 py-2 text-xs sm:text-sm">Дія</th>
 						</tr>
 					</thead>
 					<tbody>
-						{tableEntries.map((entry, index) => (
+						{filteredTableEntries.map((entry, index) => (
 							<tr key={index}>
 								<td className="border px-2 sm:px-4 py-2 text-center text-xs sm:text-sm">
 									<input
@@ -363,7 +381,6 @@ const Timer = () => {
 										Видалити
 									</button>
 								</td>
-
 							</tr>
 						))}
 					</tbody>
