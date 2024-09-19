@@ -332,7 +332,7 @@ const Timer = () => {
 							<th className="border px-1 sm:px-4 py-2 text-xs sm:text-sm">Загальний час</th>
 							<th className="border px-1 sm:px-4 py-2 text-xs sm:text-sm">Загальна сума бачів</th>
 							<th className="border px-1 sm:px-4 py-2 text-xs sm:text-sm hidden sm:table-cell">Загальна сума картинок</th>
-							<th className="border px-1 sm:px-4 py-2 text-xs sm:text-sm hidden">Дата</th>
+							<th className="border px-1 sm:px-4 py-2 text-xs sm:text-sm hidden sm:table-cell">Дата</th>
 							<th className="border px-1 sm:px-4 py-2 text-xs sm:text-sm sm:table-cell">Середній час на батч</th>
 							<th className="border px-1 sm:px-4 py-2 text-xs sm:text-sm hidden sm:table-cell">Середній час на картінку</th>
 							<th className="border px-1 sm:px-4 py-2 text-xs sm:text-sm">Дія</th>
@@ -351,8 +351,8 @@ const Timer = () => {
 								</td>
 								<td className="border px-1 sm:px-4 py-2 text-xs sm:text-sm">{formatTime(entry.totalTime)}</td>
 								<td className="border px-1 sm:px-4 py-2 text-xs sm:text-sm">{entry.packsValue}</td>
-								<td className="border px-1 sm:px-4 py-2 text-xs sm:text-sm hidden  sm:table-cell">{entry.totalInputValue}</td>
-								<td className="border px-1 sm:px-4 py-2 text-xs sm:text-sm hidden">{entry.date}</td>
+								<td className="border px-1 sm:px-4 py-2 text-xs sm:text-sm hidden sm:table-cell">{entry.totalInputValue}</td>
+								<td className="border px-1 sm:px-4 py-2 text-xs sm:text-sm hidden sm:table-cell">{entry.date}</td>
 								<td className="border px-1 sm:px-4 py-2 text-xs sm:text-sm sm:table-cell">{entry.averageTime || 'N/A'}</td>
 								<td className="border px-1 sm:px-4 py-2 text-xs sm:text-sm hidden sm:table-cell">{entry.averageTimePerImage || 'N/A'}</td>
 								<td className="border px-1 sm:px-4 py-2 text-center text-xs sm:text-sm">
@@ -379,7 +379,7 @@ const Timer = () => {
 							<td className="border px-1 sm:px-4 py-2 text-xs sm:text-sm hidden sm:table-cell font-bold">
 								{tableEntries.reduce((acc, entry) => acc + entry.totalInputValue, 0)}
 							</td>
-							<td className="border px-1 sm:px-4 py-2 text-xs sm:text-sm hidden font-bold text-center">-</td>
+							<td className="border px-1 sm:px-4 py-2 text-xs sm:text-sm hidden sm:table-cell font-bold text-center">-</td>
 							<td className="border px-1 sm:px-4 py-2 text-xs sm:text-sm  font-bold">
 								{tableEntries.length > 0
 									? formatTime(
@@ -393,7 +393,7 @@ const Timer = () => {
 									)
 									: 'N/A'}
 							</td>
-							<td className="border px-1 sm:px-4 py-2 text-xs sm:text-sm sm:table-cell hidden font-bold">
+							<td className="border px-1 sm:px-4 py-2 text-xs sm:text-sm  hidden sm:table-cell font-bold">
 								{tableEntries.reduce((acc, entry) => acc + entry.totalInputValue, 0) > 0
 									? calculateAverageTime(
 										tableEntries.reduce((acc, entry) => acc + entry.totalTime, 0),
