@@ -381,15 +381,10 @@ const Timer = () => {
 							</td>
 							<td className="border px-1 sm:px-4 py-2 text-xs sm:text-sm hidden sm:table-cell font-bold text-center">-</td>
 							<td className="border px-1 sm:px-4 py-2 text-xs sm:text-sm  font-bold">
-								{tableEntries.length > 0
-									? formatTime(
-										Math.round(
-											tableEntries.reduce((acc, entry) => {
-												const timeInSeconds = entry.totalTime / (log.length || 1);
-												console.logtimeInSeconds
-												return acc + timeInSeconds;
-											}, 0) / tableEntries.length
-										)
+								{tableEntries.reduce((acc, entry) => acc + entry.totalInputValue, 0) > 0
+									? calculateAverageTime(
+										tableEntries.reduce((acc, entry) => acc + entry.totalTime, 0),
+										tableEntries.reduce((acc, entry) => acc + (entry.totalInputValue / 30), 0)
 									)
 									: 'N/A'}
 							</td>
