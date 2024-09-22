@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 
 const Timer = () => {
 	const [time, setTime] = useState(0);
@@ -147,15 +148,15 @@ const Timer = () => {
 	const addEntryToTable = () => {
 		const packsValue = String(log.length);
 		const newEntry = {
-			id: Date.now(),
-			number: tableEntries.length + 1, // This is the initial value
+			id: uuidv4(),
+			number: tableEntries.length + 1,
 			totalTime,
 			totalInputValue,
 			packsValue,
 			date: currentDate,
 			averageTime: calculateAverageTime(totalTime, log.length),
 			averageTimePerImage: calculateAverageTime(totalTime, totalInputValue),
-			editableNumber: '', // Editable field for the number
+			editableNumber: '',
 		};
 		console.log('Adding entry to table:', newEntry);
 		setTableEntries([...tableEntries, newEntry]);
@@ -164,7 +165,7 @@ const Timer = () => {
 	const handleEditableNumberChange = (id, value) => {
 		const updatedEntries = tableEntries.map(entry => {
 			if (entry.id === id) {
-				return { ...entry, editableNumber: value }; // Update the editable number
+				return { ...entry, editableNumber: value }; // Update only the specific entry
 			}
 			return entry;
 		});
