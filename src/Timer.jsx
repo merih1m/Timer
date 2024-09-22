@@ -388,28 +388,28 @@ const Timer = () => {
 						<tr className="bg-gray-800">
 							<td className="border px-1 sm:px-4 py-2 text-xs sm:text-sm font-bold">Підсумок</td>
 							<td className="border px-1 sm:px-4 py-2 text-xs sm:text-sm font-bold">
-								{formatTime(tableEntries.reduce((acc, entry) => acc + entry.totalTime, 0))}
+								{formatTime(filteredTableEntries.reduce((acc, entry) => acc + entry.totalTime, 0))}
 							</td>
 							<td className="border px-1 sm:px-4 py-2 text-xs sm:text-sm font-bold">
-								{tableEntries.reduce((acc, entry) => acc + parseInt(entry.packsValue, 10), 0)}
+								{filteredTableEntries.reduce((acc, entry) => acc + parseInt(entry.packsValue, 10), 0)}
 							</td>
 							<td className="border px-1 sm:px-4 py-2 text-xs sm:text-sm hidden sm:table-cell font-bold">
-								{tableEntries.reduce((acc, entry) => acc + entry.totalInputValue, 0)}
+								{filteredTableEntries.reduce((acc, entry) => acc + entry.totalInputValue, 0)}
 							</td>
 							<td className="border px-1 sm:px-4 py-2 text-xs sm:text-sm hidden sm:table-cell font-bold text-center">-</td>
-							<td className="border px-1 sm:px-4 py-2 text-xs sm:text-sm  font-bold">
-								{tableEntries.reduce((acc, entry) => acc + entry.totalInputValue, 0) > 0
+							<td className="border px-1 sm:px-4 py-2 text-xs sm:text-sm font-bold">
+								{filteredTableEntries.reduce((acc, entry) => acc + entry.totalInputValue, 0) > 0
 									? calculateAverageTime(
-										tableEntries.reduce((acc, entry) => acc + entry.totalTime, 0),
-										tableEntries.reduce((acc, entry) => acc + (entry.totalInputValue / 30), 0)
+										filteredTableEntries.reduce((acc, entry) => acc + entry.totalTime, 0),
+										filteredTableEntries.reduce((acc, entry) => acc + (entry.totalInputValue / 30), 0)
 									)
 									: 'N/A'}
 							</td>
-							<td className="border px-1 sm:px-4 py-2 text-xs sm:text-sm  hidden sm:table-cell font-bold">
-								{tableEntries.reduce((acc, entry) => acc + entry.totalInputValue, 0) > 0
+							<td className="border px-1 sm:px-4 py-2 text-xs sm:text-sm hidden sm:table-cell font-bold">
+								{filteredTableEntries.reduce((acc, entry) => acc + entry.totalInputValue, 0) > 0
 									? calculateAverageTime(
-										tableEntries.reduce((acc, entry) => acc + entry.totalTime, 0),
-										tableEntries.reduce((acc, entry) => acc + entry.totalInputValue, 0)
+										filteredTableEntries.reduce((acc, entry) => acc + entry.totalTime, 0),
+										filteredTableEntries.reduce((acc, entry) => acc + entry.totalInputValue, 0)
 									)
 									: 'N/A'}
 							</td>
