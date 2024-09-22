@@ -146,25 +146,28 @@ const Timer = () => {
 
 	const addEntryToTable = () => {
 		const packsValue = String(log.length);
-
 		const newEntry = {
-			number: tableEntries.length + 1,
+			id: Date.now(),
+			number: tableEntries.length + 1, // This is the initial value
 			totalTime,
 			totalInputValue,
 			packsValue,
 			date: currentDate,
 			averageTime: calculateAverageTime(totalTime, log.length),
 			averageTimePerImage: calculateAverageTime(totalTime, totalInputValue),
-			editableNumber: '',
+			editableNumber: '', // Editable field for the number
 		};
 		console.log('Adding entry to table:', newEntry);
 		setTableEntries([...tableEntries, newEntry]);
 	};
 
-	const handleEditableNumberChange = (index, value) => {
-		console.log(`Updating entry ${index} editable number to: ${value}`);
-		const updatedEntries = [...tableEntries];
-		updatedEntries[index].editableNumber = value;
+	const handleEditableNumberChange = (id, value) => {
+		const updatedEntries = tableEntries.map(entry => {
+			if (entry.id === id) {
+				return { ...entry, editableNumber: value }; // Update the editable number
+			}
+			return entry;
+		});
 		setTableEntries(updatedEntries);
 	};
 
@@ -185,22 +188,19 @@ const Timer = () => {
 		localStorage.setItem('timerLog', JSON.stringify(newLog));
 	};
 
-	const deleteTableEntry = (index) => {
+	const deleteTableEntry = (id) => {
 		if (window.confirm('Ви впевнені, що хочете очистити стрічку?')) {
-			const newEntries = tableEntries.filter((_, i) => i !== index);
-			console.log('Deleting table entry at index:', index);
+			const newEntries = tableEntries.filter(entry => entry.id !== id);
+			console.log('Deleting table entry with ID:', id);
 			setTableEntries(newEntries);
 			localStorage.setItem('tableEntries', JSON.stringify(newEntries));
 		}
 	};
 
-
-	// Фільтр для таблиці по даті
 	const toggleDateFilter = () => {
 		setIsFilteredByDate(!isFilteredByDate);
 	};
 
-	// Фільтровані записи таблиці
 	const filteredTableEntries = isFilteredByDate
 		? tableEntries.filter(entry => entry.date === currentDate)
 		: tableEntries;
@@ -357,13 +357,13 @@ const Timer = () => {
 						</tr>
 					</thead>
 					<tbody>
-						{filteredTableEntries.map((entry, index) => (
-							<tr key={index}>
+						{filteredTableEntries.map((entry) => (
+							<tr key={entry.id}>
 								<td className="border px-2 sm:px-4 py-2 text-center text-xs sm:text-sm">
 									<input
-										type="string"
-										value={entry.editableNumber}
-										onChange={(e) => handleEditableNumberChange(index, e.target.value)}
+										type="text"
+										value={entry.editableNumber !== '' ? entry.editableNumber : entry.number} // Use editable number or default number
+										onChange={(e) => handleEditableNumberChange(entry.id, e.target.value)}
 										className="text-center bg-transparent outline-none w-full sm:w-[80px] focus:bg-[rgb(18,18,18)] focus:border focus:border-gray-300 focus:rounded focus:p-1"
 									/>
 								</td>
@@ -375,7 +375,7 @@ const Timer = () => {
 								<td className="border px-1 sm:px-4 py-2 text-xs sm:text-sm hidden sm:table-cell">{entry.averageTimePerImage || 'N/A'}</td>
 								<td className="border px-1 sm:px-4 py-2 text-center text-xs sm:text-sm">
 									<button
-										onClick={() => deleteTableEntry(index)}
+										onClick={() => deleteTableEntry(entry.id)}
 										className="bg-red-500 hover:bg-red-700 text-white text-xs sm:text-sm px-1 py-1 rounded"
 									>
 										Видалити
@@ -384,6 +384,7 @@ const Timer = () => {
 							</tr>
 						))}
 					</tbody>
+
 					<tfoot>
 						<tr className="bg-gray-800">
 							<td className="border px-1 sm:px-4 py-2 text-xs sm:text-sm font-bold">Підсумок</td>
