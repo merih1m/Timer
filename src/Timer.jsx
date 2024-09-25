@@ -149,7 +149,6 @@ const Timer = () => {
 		const packsValue = String(log.length);
 		const newEntry = {
 			id: uuidv4(),
-			number: tableEntries.length + 1,
 			totalTime,
 			totalInputValue,
 			packsValue,
@@ -363,7 +362,7 @@ const Timer = () => {
 								<td className="border px-2 sm:px-4 py-2 text-center text-xs sm:text-sm">
 									<input
 										type="text"
-										value={entry.editableNumber !== '' ? entry.editableNumber : entry.number} // Use editable number or default number
+										value={entry.editableNumber !== '' ? entry.editableNumber : ""}
 										onChange={(e) => handleEditableNumberChange(entry.id, e.target.value)}
 										className="text-center bg-transparent outline-none w-full sm:w-[80px] focus:bg-[rgb(18,18,18)] focus:border focus:border-gray-300 focus:rounded focus:p-1"
 									/>
