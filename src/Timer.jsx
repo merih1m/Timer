@@ -1,4 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
+import { Calendar } from "./components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "./components/ui/popover";
+import { format } from "date-fns";
 import { v4 as uuidv4 } from 'uuid';
 
 const Timer = () => {
@@ -14,8 +17,19 @@ const Timer = () => {
 	const [tableEntries, setTableEntries] = useState([]);
 	const [isFilteredByDate, setIsFilteredByDate] = useState(false);
 	const intervalRef = useRef(null);
+	const [selectedDate, setSelectedDate] = useState(null);
+	const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
+
+
 
 	const currentDate = new Date().toLocaleDateString('uk-UA');
+
+	const handleDateSelect = (date) => {
+		setSelectedDate(date);
+		setIsFilteredByDate(true);
+		setIsDatePickerOpen(false);
+	};
+
 
 	useEffect(() => {
 		console.log('Retrieving log and table entries from localStorage...');
@@ -196,17 +210,16 @@ const Timer = () => {
 			localStorage.setItem('tableEntries', JSON.stringify(newEntries));
 		}
 	};
+	const formattedSelectedDate = selectedDate ? selectedDate.toLocaleDateString('uk-UA') : null;
 
-	const toggleDateFilter = () => {
-		setIsFilteredByDate(!isFilteredByDate);
-	};
-
-	const filteredTableEntries = isFilteredByDate
-		? tableEntries.filter(entry => entry.date === currentDate)
+	const filteredTableEntries = isFilteredByDate && formattedSelectedDate
+		? tableEntries.filter(entry => entry.date === formattedSelectedDate)
 		: tableEntries;
 
+
+
 	return (
-		<div className="p-4 font-sans">
+		<div className="p-4 font-sans text-white">
 			<div className="flex flex-col items-center justify-center">
 				<h1 className="text-lg sm:text-2xl font-bold mb-4">Timer</h1>
 				<div className="flex flex-col sm:flex-row justify-center items-center sm:space-x-4 space-y-2 sm:space-y-0">
@@ -340,34 +353,59 @@ const Timer = () => {
 			<div className="mt-4 overflow-x-auto">
 				<table className="min-w-full border-collapse text-sm sm:text-base">
 					<thead>
-						<tr className="bg-gray-800">
-							<th className="border px-1 sm:px-4 py-2 text-xs sm:text-sm">№</th>
-							<th className="border px-1 sm:px-4 py-2 text-xs sm:text-sm">Загальний час</th>
-							<th className="border px-1 sm:px-4 py-2 text-xs sm:text-sm">Загальна сума бачів</th>
-							<th className="border px-1 sm:px-4 py-2 text-xs sm:text-sm hidden sm:table-cell">Загальна сума картинок</th>
-							<th
-								onClick={toggleDateFilter} // Додаємо клік для фільтрації
-								className="border px-1 sm:px-4 py-2 text-xs sm:text-sm hidden sm:table-cell cursor-pointer hover:bg-gray-700"
-							>
-								Дата {isFilteredByDate ? "(Сьогодні)" : ""}
-							</th>
-							<th className="border px-1 sm:px-4 py-2 text-xs sm:text-sm sm:table-cell">Середній час на батч</th>
-							<th className="border px-1 sm:px-4 py-2 text-xs sm:text-sm hidden sm:table-cell">Середній час на картінку</th>
-							<th className="border px-1 sm:px-4 py-2 text-xs sm:text-sm">Дія</th>
-						</tr>
+					<tr className="bg-gray-800">
+						<th className="border px-1 sm:px-4 py-2 text-xs sm:text-sm">№</th>
+						<th className="border px-1 sm:px-4 py-2 text-xs sm:text-sm">Загальний час</th>
+						<th className="border px-1 sm:px-4 py-2 text-xs sm:text-sm">Загальна сума бачів</th>
+						<th className="border px-1 sm:px-4 py-2 text-xs sm:text-sm hidden sm:table-cell">Загальна сума
+							картинок
+						</th>
+						<th className="border px-1 sm:px-4 py-2 text-xs sm:text-sm hidden sm:table-cell">
+							<Popover open={isDatePickerOpen} onOpenChange={setIsDatePickerOpen}>
+								<PopoverTrigger asChild>
+									<button
+										className="w-full text-left cursor-pointer bg-gray-800 hover:bg-gray-700"
+									>
+										Дата {isFilteredByDate && selectedDate ? `(${format(selectedDate, 'dd.MM.yyyy')})` : ""}
+									</button>
+								</PopoverTrigger>
+								<PopoverContent className="w-auto p-0 bg-white text-black z-50" align="start">
+									<Calendar
+										mode="single"
+										selected={selectedDate}
+										onSelect={handleDateSelect}
+										initialFocus
+										className="bg-gray-800 text-white"
+										dayClassName={({ selected }) =>
+											`rounded-md w-9 h-9 flex items-center justify-center 
+		${selected ? 'bg-white text-black' : 'hover:bg-gray-700'}`
+										}
+									/>
+								</PopoverContent>
+							</Popover>
+						</th>
+
+
+						<th className="border px-1 sm:px-4 py-2 text-xs sm:text-sm sm:table-cell">Середній час на батч
+						</th>
+						<th className="border px-1 sm:px-4 py-2 text-xs sm:text-sm hidden sm:table-cell">Середній час на
+							картінку
+						</th>
+						<th className="border px-1 sm:px-4 py-2 text-xs sm:text-sm">Дія</th>
+					</tr>
 					</thead>
 					<tbody>
-						{filteredTableEntries.map((entry) => (
-							<tr key={entry.id}>
-								<td className="border px-2 sm:px-4 py-2 text-center text-xs sm:text-sm">
-									<input
-										type="text"
-										value={entry.editableNumber !== '' ? entry.editableNumber : ""}
-										onChange={(e) => handleEditableNumberChange(entry.id, e.target.value)}
-										className="text-center bg-transparent outline-none w-full sm:w-[80px] focus:bg-[rgb(18,18,18)] focus:border focus:border-gray-300 focus:rounded focus:p-1"
-									/>
-								</td>
-								<td className="border px-1 sm:px-4 py-2 text-xs sm:text-sm">{formatTime(entry.totalTime)}</td>
+					{filteredTableEntries.map((entry) => (
+						<tr key={entry.id}>
+							<td className="border px-2 sm:px-4 py-2 text-center text-xs sm:text-sm">
+								<input
+									type="text"
+									value={entry.editableNumber !== '' ? entry.editableNumber : ""}
+									onChange={(e) => handleEditableNumberChange(entry.id, e.target.value)}
+									className="text-center bg-transparent outline-none w-full sm:w-[80px] focus:bg-[rgb(18,18,18)] focus:border focus:border-gray-300 focus:rounded focus:p-1"
+								/>
+							</td>
+							<td className="border px-1 sm:px-4 py-2 text-xs sm:text-sm">{formatTime(entry.totalTime)}</td>
 								<td className="border px-1 sm:px-4 py-2 text-xs sm:text-sm">{entry.packsValue}</td>
 								<td className="border px-1 sm:px-4 py-2 text-xs sm:text-sm hidden sm:table-cell">{entry.totalInputValue}</td>
 								<td className="border px-1 sm:px-4 py-2 text-xs sm:text-sm hidden sm:table-cell">{entry.date}</td>
