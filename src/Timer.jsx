@@ -12,8 +12,8 @@ const Timer = () => {
 	const [inputValue, setInputValue] = useState(30);
 	const [totalInputValue, setTotalInputValue] = useState(0);
 	const [isEditingTime, setIsEditingTime] = useState(false);
-	const [minRandomTime, setMinRandomTime] = useState('00:01:30');
-	const [maxRandomTime, setMaxRandomTime] = useState('00:02:55');
+	const [minRandomTime, setMinRandomTime] = useState('00:03:00');
+	const [maxRandomTime, setMaxRandomTime] = useState('00:03:10');
 	const [tableEntries, setTableEntries] = useState([]);
 	const [isFilteredByDate, setIsFilteredByDate] = useState(false);
 	const intervalRef = useRef(null);
