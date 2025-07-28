@@ -19,6 +19,7 @@ const Timer = () => {
 	const intervalRef = useRef(null);
 	const [selectedDate, setSelectedDate] = useState(null);
 	const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
+	const [copySuccess, setCopySuccess] = useState(false);
 
 
 
@@ -216,13 +217,23 @@ const Timer = () => {
 		? tableEntries.filter(entry => entry.date === formattedSelectedDate)
 		: tableEntries;
 
+	const copyTimeToClipboard = () => {
+		navigator.clipboard.writeText(formatTime(time)).then(() => {
+			setCopySuccess(true);
+			setTimeout(() => setCopySuccess(false), 1000); // Показуємо 1 секунду
+		}).catch((err) => {
+			console.error('Помилка копіювання: ', err);
+		});
+	};
+
 
 
 	return (
 		<div className="p-4 font-sans text-white">
 			<div className="flex flex-col items-center justify-center">
 				<h1 className="text-lg sm:text-2xl font-bold mb-4">Timer</h1>
-				<div className="flex flex-col sm:flex-row justify-center items-center sm:space-x-4 space-y-2 sm:space-y-0">
+				<div
+					className="flex flex-col sm:flex-row justify-center items-center sm:space-x-4 space-y-2 sm:space-y-0">
 					{isEditingTime ? (
 						<input
 							type="text"
@@ -232,13 +243,21 @@ const Timer = () => {
 							autoFocus
 						/>
 					) : (
+						<div className="flex items-center space-x-2">
 						<span
 							className="text-lg sm:text-xl cursor-pointer w-full sm:w-28 text-center"
 							onClick={() => setIsEditingTime(true)}
 						>
 							{formatTime(time)}
 						</span>
+						{copySuccess && (
+								<span className="text-green-400 text-xs animate-fade-in">✔ Скопійовано!</span>
+						)}
+						</div>
+
 					)}
+
+
 					<span className="text-lg sm:text-xl">|</span>
 					<input
 						type="number"
@@ -248,7 +267,8 @@ const Timer = () => {
 					/>
 				</div>
 				<div className="flex flex-col items-center mb-2 space-y-2">
-					<div className="flex flex-col sm:flex-row justify-center items-center sm:space-x-4 space-y-2 sm:space-y-0">
+					<div
+						className="flex flex-col sm:flex-row justify-center items-center sm:space-x-4 space-y-2 sm:space-y-0">
 						<input
 							type="text"
 							value={minRandomTime}
@@ -291,7 +311,7 @@ const Timer = () => {
 				</div>
 			</div>
 
-			<div className="mt-2 flex flex-col sm:flex-row justify-center gap-2.5 space-y-2 sm:space-y-0">
+			<div className="mt-2 mb-4 flex flex-col sm:flex-row justify-center gap-2.5 space-y-2 sm:space-y-0">
 				<button
 					onClick={logTime}
 					className="bg-blue-500 w-full sm:w-3/12 h-12 text-white px-4 py-2 rounded"
@@ -311,7 +331,14 @@ const Timer = () => {
 					Рандомний час
 				</button>
 			</div>
-
+			<div className="mt-2 flex flex-col sm:flex-row justify-center gap-2.5 space-y-2 sm:space-y-0">
+				<button
+					onClick={copyTimeToClipboard}
+					className="bg-blue-700 w-full sm:w-3/12 h-12 text-white px-4 py-2 rounded"
+				>
+					Скопіювати
+				</button>
+			</div>
 			<div>
 				<h2 className="text-lg sm:text-xl mb-2">Лог часу:</h2>
 				<ul className="flex flex-col-reverse list-inside">
